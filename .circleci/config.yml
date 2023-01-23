@@ -81,7 +81,7 @@ workflows:
     when: 
       and:
         - not: << pipeline.parameters.run_with_approval >>
-        - not: << pipeline.parameters.run_with_approval >>
+        - not: << pipeline.parameters.run_without_approval >>
     jobs:
       - gate 
 
