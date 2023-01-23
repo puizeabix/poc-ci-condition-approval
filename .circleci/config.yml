@@ -65,13 +65,13 @@ jobs:
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  with-approval-workflow:
-    when: << pipeline.parameters.run_with_approval >>
+  without-approval-workflow:
+    when: << pipeline.parameters.run_without_approval >>
     jobs:
       - other
     
-  without-approval-workflow:
-    when: << pipeline.parameters.run_without_approval >>
+  with-approval-workflow:
+    when: << pipeline.parameters.run_with_approval >>
     jobs:
       - request-approval:
           type: approval
