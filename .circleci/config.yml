@@ -20,7 +20,6 @@ jobs:
       - run:
           name: "Failed gate"
           command: "exit 0"
-      - hold:
 
   other:
     docker:
