@@ -26,7 +26,7 @@ jobs:
       - checkout
       - run:
           name: "Failed gate"
-          command: "other jobs"
+          command: "echo other_jobs"
 
 
 # Invoke jobs via workflows
@@ -38,4 +38,7 @@ workflows:
       - request-approval:
           type: approval
           when: on_fail
-      - other
+      - other:
+          require:
+            - request-approval
+
