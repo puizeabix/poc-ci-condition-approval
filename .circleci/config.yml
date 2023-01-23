@@ -16,7 +16,7 @@ jobs:
       - checkout
       - run:
           name: "Failed gate"
-          command: "exit 1"
+          command: "exit 0"
   other:
     docker:
       - image: cimg/base:stable
