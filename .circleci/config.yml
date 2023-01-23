@@ -2,6 +2,9 @@
 # See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
+orbs:
+  approvals: commitdev/approvals@0.0.2
+
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
@@ -17,6 +20,8 @@ jobs:
       - run:
           name: "Failed gate"
           command: "exit 0"
+      - hold:
+
   other:
     docker:
       - image: cimg/base:stable
@@ -40,8 +45,6 @@ workflows:
           when: on_fail
       - other:
           requires:
-            - request-approval
-      - other:
-          requires:
             - gate
+            - request-approval
 
