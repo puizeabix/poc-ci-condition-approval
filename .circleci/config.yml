@@ -54,7 +54,7 @@ jobs:
       - checkout
       - run:
           name: "Failed gate"
-          command: "echo other_jobs"
+          command: "echo $GATE_STATUS"
 
 
 # Invoke jobs via workflows
