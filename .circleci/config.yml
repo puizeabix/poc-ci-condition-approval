@@ -3,7 +3,10 @@
 version: 2.1
 
 parameters:
-  approval_required:
+  run_without_approval:
+    type: boolean
+    default: false
+  run_with_approval:
     type: boolean
     default: false
 
@@ -28,20 +31,22 @@ jobs:
           name: "If failed"
           when: on_fail
           command: |
-            echo "export GATESTATUS=false" >> $BASH_ENV
-            export GATE_STATUS=false
+            curl --request POST \
+            --url https://circleci.com/api/v2/project/vcs-slug/org-name/repo-name/pipeline \
+            --header "Circle-Token: 326fba66419ddac825940a733aceb4664e4f682b" \
+            --header "content-type: application/json" \
+            --data '{"parameters": {"run_with_approval": true, "run_without_approval": false}}'
       - run: 
           name: "If success"
           when: on_success
           command: |
-            echo "export GATESTATUS=false" >> $BASH_ENV
-            export GATE_STATUS=true
-      - run: |
-          cp $BASH_ENV bash.env
-      - persist_to_workspace:
-          root: .
-          paths:
-            - bash.env
+            command: |
+            curl --request POST \
+            --url https://circleci.com/api/v2/project/vcs-slug/org-name/repo-name/pipeline \
+            --header "Circle-Token: 326fba66419ddac825940a733aceb4664e4f682b" \
+            --header "content-type: application/json" \
+            --data '{"parameters": {"run_with_approval": false, "run_without_approval": true}}'
+
     
 
   other:
@@ -60,10 +65,12 @@ jobs:
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
   with-approval-workflow:
+    when: << pipeline.parameters.run_with_approval >>
     jobs:
       - other
     
   without-approval-workflow:
+    << pipeline.parameters.run_without_approval >>
     jobs:
       - request-approval:
           type: approval
