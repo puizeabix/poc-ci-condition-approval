@@ -26,10 +26,9 @@ jobs:
     steps:
       - checkout
       - run:
-          name: "Failed gate"
+          name: "Gate"
           command: |
-            echo $GATE_STATUS
-            exit 0
+            exit 1
       - run:
           name: "If failed"
           when: on_fail
