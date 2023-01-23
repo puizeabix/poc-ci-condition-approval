@@ -20,6 +20,15 @@ jobs:
       - run:
           name: "Failed gate"
           command: "exit 0"
+      - run:
+          name: "If failed"
+          command: "echo success"
+          when: on_fail
+      - run: 
+          name: "If success"
+          command: "echo failure"
+          when: on_success
+
 
   other:
     docker:
