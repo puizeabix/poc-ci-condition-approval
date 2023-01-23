@@ -70,7 +70,7 @@ workflows:
       - other
     
   without-approval-workflow:
-    << pipeline.parameters.run_without_approval >>
+    when: << pipeline.parameters.run_without_approval >>
     jobs:
       - request-approval:
           type: approval
