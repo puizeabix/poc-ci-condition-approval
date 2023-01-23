@@ -32,8 +32,8 @@ jobs:
           when: on_fail
           command: |
             curl --request POST \
-            --url https://circleci.com/api/v2/project/github/puizeabix/poc-ci-condition-approval/pipeline\
-            --header "Circle-Token: 326fba66419ddac825940a733aceb4664e4f682b" \
+            --url https://circleci.com/api/v2/project/github/puizeabix/poc-ci-condition-approval/pipeline \
+            --header "Circle-Token: $CI_TOKEN" \
             --header "content-type: application/json" \
             --data '{"parameters": {"run_with_approval": true, "run_without_approval": false}}'
       - run: 
@@ -42,7 +42,7 @@ jobs:
           command: |
             curl --request POST \
             --url https://circleci.com/api/v2/project/github/puizeabix/poc-ci-condition-approval/pipeline \
-            --header "Circle-Token: 326fba66419ddac825940a733aceb4664e4f682b" \
+            --header "Circle-Token: $CI_TOKEN" \
             --header "content-type: application/json" \
             --data '{"parameters": {"run_with_approval": false, "run_without_approval": true}}'
 
@@ -78,6 +78,10 @@ workflows:
             - request-approval
 
   main-workflow:
+    when: 
+      and:
+        - not: << pipeline.parameters.run_with_approval >>
+        - not: << pipeline.parameters.run_with_approval >>
     jobs:
       - gate 
 
