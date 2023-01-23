@@ -46,6 +46,5 @@ workflows:
             - gate
       - other:
           requires:
-            - gate
             - request-approval
 
