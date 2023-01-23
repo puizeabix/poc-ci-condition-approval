@@ -41,7 +41,9 @@ workflows:
       - gate 
       - request-approval:
           type: approval
-          when: on_fail
+          when: on_failure
+          requires:
+            - gate
       - other:
           requires:
             - gate
