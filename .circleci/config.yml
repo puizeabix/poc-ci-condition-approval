@@ -39,6 +39,6 @@ workflows:
           type: approval
           when: on_fail
       - other:
-          require:
+          requires:
             - request-approval
 
