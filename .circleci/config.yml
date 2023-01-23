@@ -9,6 +9,9 @@ parameters:
   run_with_approval:
     type: boolean
     default: false
+  main_flow:
+    type: boolean
+    default: true
 
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
@@ -35,7 +38,7 @@ jobs:
             --url https://circleci.com/api/v2/project/github/puizeabix/poc-ci-condition-approval/pipeline \
             --header "Circle-Token: $CI_TOKEN" \
             --header "content-type: application/json" \
-            --data '{"parameters": {"run_with_approval": true, "run_without_approval": false}}'
+            --data '{"parameters": {"run_with_approval": true, "run_without_approval": false, "main_flow": false}}'
       - run: 
           name: "If success"
           when: on_success
@@ -44,7 +47,7 @@ jobs:
             --url https://circleci.com/api/v2/project/github/puizeabix/poc-ci-condition-approval/pipeline \
             --header "Circle-Token: $CI_TOKEN" \
             --header "content-type: application/json" \
-            --data '{"parameters": {"run_with_approval": false, "run_without_approval": true}}'
+            --data '{"parameters": {"run_with_approval": false, "run_without_approval": true, "main_flow": false}}'
 
     
 
@@ -78,10 +81,7 @@ workflows:
             - request-approval
 
   main-workflow:
-    when: 
-      and:
-        - not: << pipeline.parameters.run_with_approval >>
-        - not: << pipeline.parameters.run_without_approval >>
+    when: << pipeline.parameters.main_flow >>
     jobs:
       - gate 
 
