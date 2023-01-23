@@ -35,6 +35,8 @@ workflows:
   say-hello-workflow:
     jobs:
       - gate 
+      - other:
+          when: on_success
       - request-approval:
           type: approval
           when: on_fail
