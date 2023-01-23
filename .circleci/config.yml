@@ -2,8 +2,10 @@
 # See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
-orbs:
-  approvals: commitdev/approvals@0.0.2
+parameters:
+  approval_required:
+    type: boolean
+    default: false
 
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
@@ -19,15 +21,33 @@ jobs:
       - checkout
       - run:
           name: "Failed gate"
-          command: "exit 0"
+          command: |
+            echo $GATE_STATUS
+            exit 0
       - run:
           name: "If failed"
-          command: "echo success"
           when: on_fail
+          command: |
+            echo "export GATESTATUS=false" >> $BASH_ENV
       - run: 
           name: "If success"
-          command: "echo failure"
           when: on_success
+          command: |
+            echo "export GATESTATUS=false" >> $BASH_ENV
+      - run: |
+          cp $BASH_ENV bash.env
+      - persist_to_workspace:
+          root: .
+          paths:
+            - bash.env
+  approval: 
+    docker:
+      - image: cimg/base:stable
+    parameters:
+      approval_required:
+        default: false
+        type: boolean
+
 
 
   other:
