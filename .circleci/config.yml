@@ -42,8 +42,7 @@ jobs:
           root: .
           paths:
             - bash.env
-
-
+    
 
   other:
     docker:
@@ -60,15 +59,19 @@ jobs:
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  say-hello-workflow:
+  with-approval-workflow:
     jobs:
-      - gate 
+      - other
+    
+  without-approval-workflow:
+    jobs:
       - request-approval:
           type: approval
-          when: on_failure
-          requires:
-            - gate
       - other:
           requires:
             - request-approval
+
+  main-workflow:
+    jobs:
+      - gate 
 
